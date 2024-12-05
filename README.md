@@ -48,7 +48,7 @@ O **FoxWire** é um protocolo de comunicação eficiente baseado em UART half-du
 
 ## Aplicações Típicas
 - Sistemas embarcados.
-- Sensores de movimento.
+- Sensores (exemplo: [FX-S50](https://github.com/luisf18/FXDevices/blob/main/Sensor_FXS50/README.md)).
 - Memórias.
 - ESCs (Electronic Speed Controllers).
 - Servomotores.
