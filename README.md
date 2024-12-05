@@ -3,7 +3,7 @@
 
 # Protocolo FoxWire
 
-O **FoxWire** é um protocolo de comunicação eficiente baseado em UART half-duplex, que utiliza um único fio para conectar um Host com até 32 dispositivos. Ele é projetado para simplificar a integração de sensores, servomotores e ESCs, permitindo uma comunicação coordenada e confiável.
+**FoxWire** é um protocolo de comunicação eficiente baseado em UART half-duplex, que utiliza um único fio para conectar um Host com até 32 dispositivos. Ele é projetado para simplificar a integração de sensores, servomotores e ESCs, permitindo uma comunicação coordenada e confiável.
 
 ## Implementações:
 - [Arduino (por enquanto suporte apenas ao Atemega328)](./Arduino)
@@ -53,7 +53,7 @@ O **FoxWire** é um protocolo de comunicação eficiente baseado em UART half-du
 - ESCs (Electronic Speed Controllers).
 - Servomotores.
 
-O **FoxWire** combina simplicidade e flexibilidade, sendo ideal para aplicações que exigem comunicação eficiente com cabeamento reduzido.
+**FoxWire** combina simplicidade e flexibilidade, sendo ideal para aplicações que exigem comunicação eficiente com cabeamento reduzido.
 
 <p align="center">
   <img src="docs\LogoFox.png" alt="Logo" width="200px">
