@@ -1,52 +1,24 @@
-/*
-  Autor: Luis Felipe M. F. (luisf18)
-  
-  ---------------------------------------------------------
-  Scanner FoxWire
-  ---------------------------------------------------------
-
-    Busca e printa os dispositivos encontrados.
-  
-  Placas compativeis:
-    Atmega328
-      - Arduino UNO
-      - Arduino Nano
-      - Arduino Micro
-  
-  Circuito:
-    Vcc  ----------------------- Vcc
-    Pino -----[Resistor 1k]----  Fx ... dispositivos ...
-    GND  ----------------------- GND
-
-*/
-
-
-#include "FoxWire.h"
-
-#define FX_PIN A0
+#define PWM_PIN 11  // Pino de saída PWM (OC2A)
 
 void setup() {
-  
-  Serial.begin(115200);
+    Serial.begin(115200);  // Inicia comunicação serial
 
-  FoxWire_init<FX_PIN>();
+    pinMode(PWM_PIN, OUTPUT);
 
-  Serial.println("scanning...");
-  for(uint8_t addr=0;addr<=0x1F;addr++){
-    uint8_t x = FoxWire_check<FX_PIN>(addr);
-    if( x ){
-      Serial.println("- Found: 0x" + String( addr, HEX ) );
-    }
-    delay(1);
-  }
-  Serial.println("end scanning");
+    // Configuração do Timer 2 para Fast PWM com ~31.37 kHz no pino 11 (OC2A)
+    TCCR2A = (1 << WGM20) | (1 << WGM21) | (1 << COM2A1); // Fast PWM, saída não-invertida
+    TCCR2B = (1 << WGM22) | (1 << CS20);  // Prescaler = 1, modo Fast PWM (TOP = OCR2A)
 
+    OCR2A = 255;  // Definir o TOP do PWM
+    OCR2B = 0;    // Começa com PWM em 0%
 }
 
 void loop() {
-
+    if (Serial.available()) {
+        int pwm_value = Serial.parseInt(); // Lê valor da Serial
+        if (pwm_value >= 0 && pwm_value <= 255) {
+            OCR2B = pwm_value;  // Aplica o PWM no pino 11
+        }
+        Serial.println(OCR2B);
+    }
 }
-
-
-
-

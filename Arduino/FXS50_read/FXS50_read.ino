@@ -47,6 +47,16 @@ void setup() {
   pinMode(3,OUTPUT);
   pinMode(2,OUTPUT);
 
+  
+  // Arduino blink
+  DDRB &= 0x10; 
+  while(1){
+    PORTB &= ~0x10;
+    PORTB |= 0x10;
+  }
+
+
+
   FoxWire_init<FX_PIN>();
 
   for(uint8_t i=0;(i<=0x1F) && (sensors_detected<SENSORS_COUNT);i++){

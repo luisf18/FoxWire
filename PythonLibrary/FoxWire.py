@@ -7,6 +7,27 @@ arduino_port = 'COM16'  # Substitua pela porta correta (ex: COM3 no Windows ou /
 baud_rate = 115200  # Taxa de comunicação. Certifique-se de que o Arduino está usando a mesma taxa
 ser = None
 
+# lista de comandos READ do core FoxWire
+CMD_DEVICE_ID_L        = 0
+CMD_DEVICE_ID_H        = 1
+CMD_LOT_L              = 2
+CMD_LOT_H              = 3
+CMD_LOT_DATE_L         = 4
+CMD_LOT_DATE_H         = 5
+CMD_FOXWIRE_VERSION_ID = 6
+CMD_FIRMWARE_ID        = 7
+CMD_FIRMWARE_VERSION   = 8
+CMD_REQUEST_WRITE      = 9
+CMD_MCU_RESET          = 10
+CMD_MCU_VOLTAGE        = 11
+CMD_MCU_TEMPERATURE    = 12
+
+
+# lista de comandos WRITE do core FoxWire
+CMD_W_SAVE = 1
+CMD_W_RESTORE = 2
+CMD_W_RESTORE_KEEP_ADDR = 3
+
 def init( port = 'COM16' ):
     global ser
     global arduino_port
@@ -17,6 +38,7 @@ def init( port = 'COM16' ):
 def LOG( txt, log ):
     if(log):
         print( txt )
+
 
 # envia bytes
 def send( data, recive_size, log = False ):
@@ -42,7 +64,7 @@ def CHECK( addr, log = False ):
         if( len(response) > 1 ):
             if( response[1]&0x1F == addr ):
                 LOG( "connected", log )
-                return 1
+                return (3&(response[1]>>5))
             else:
                 LOG( "Incorrect", log )
         else:
@@ -77,13 +99,45 @@ def scan( log = False ):
         print( f"Scanning..." )
     found = []
     for i in range(0x1F+1):
-        if(CHECK(i,False)):
+        if( CHECK(i,False) is not None ):
             if(log):
                 print( f"[Found][{hex(i)}]" )
             found += [i]
     if(log):
         print( f"end scanning" )
     return found
+
+#-------------------------------------------------------------------
+# Funções principais
+#-------------------------------------------------------------------
+
+def checksum(v):
+    return ( 3 & ( (v&1) + ((v>>1)&1) + ((v>>2)&1) + ((v>>3)&1) + ((v>>4)&1) ) )
+
+# Registradores
+def read_register( addr, reg, log = False ):
+    temp  = 0x80 | (checksum(reg)<<5) | (reg&0x1F)
+    return READ( addr, temp )
+
+def write_register( addr, reg, value, log = False ):
+    temp  = 0x80 | (checksum(reg)<<5) | (reg&0x1F)
+    return WRITE( addr, temp, value )
+
+# Comandos
+def command( addr, cmd, value = None, log = False ):
+    temp  = (checksum(cmd)<<5) | (cmd&0x1F)
+    if(value):
+        return WRITE( addr, temp, value )
+    else:
+        return READ( addr, temp )
+
+def command_key( addr, cmd, log = False ):
+    key = command( addr, CMD_REQUEST_WRITE )
+    if( key ):
+        data = 0xff&(~key)
+        LOG(f"key [{data}]",log)
+        return command( addr, cmd, data )
+    return 0
 
 if __name__ == "__main__":
     init()
