@@ -21,7 +21,7 @@ Implementação em python do protocolo FoxWire usando um conversor UBS-Serial co
 **Parâmetros**:
   - `port` (*str*): Porta serial a ser utilizada (ex.: `COM3` no Windows ou `/dev/ttyUSB0` no Linux). Padrão: `'COM16'`.
 
-### `LOG(txt, log)`
+### `logif(txt, log)`
 **Descrição**: Exibe mensagens no console se o log estiver habilitado.  
 **Parâmetros**:  
 - `txt` (str): Mensagem a ser exibida.  
@@ -39,7 +39,7 @@ Implementação em python do protocolo FoxWire usando um conversor UBS-Serial co
 
 ---
 
-### `CHECK(addr, log=False)`
+### `pack_check(addr, log=False)`
 **Descrição**: Envia um pacote do tipo CHECK (envia 1 bytes e recebe 1). Verifica a conexão de um dispositivo em um endereço específico.  
 **Parâmetros**:  
 - `addr` (int): Endereço do dispositivo.  
@@ -48,7 +48,7 @@ Implementação em python do protocolo FoxWire usando um conversor UBS-Serial co
 
 ---
 
-### `READ(device_addr, addr, log=False)`
+### `pack_read(device_addr, addr, log=False)`
 **Descrição**: Envia um pacote do tipo READ (envia 2 bytes e recebe 1). Tipicamente é usado para ler um valor de um endereço de um dispositivo.  
 **Parâmetros**:  
 - `device_addr` (int): Endereço do dispositivo.  
@@ -58,7 +58,7 @@ Implementação em python do protocolo FoxWire usando um conversor UBS-Serial co
 
 ---
 
-### `WRITE(device_addr, addr, val, log=False)`
+### `pack_write(device_addr, addr, val, log=False)`
 **Descrição**: Envia um pacote do tipo WRITE (envia 3 bytes e recebe 1). Escreve um valor em um endereço de um dispositivo.  
 **Parâmetros**:  
 - `device_addr` (int): Endereço do dispositivo.  

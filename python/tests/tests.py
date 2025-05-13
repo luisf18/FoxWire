@@ -1,4 +1,4 @@
-import FoxWire as fx
+import foxwire as fx
 
 fx.init("COM10")
 addr = fx.scan(True)
@@ -30,4 +30,4 @@ if( len(addr) ):
     #r = fx.command_key( addr, fx.CMD_W_SAVE, True )
     #print( f"ok? {r}" )
 
-fx.ser.close()
+fx.close()
